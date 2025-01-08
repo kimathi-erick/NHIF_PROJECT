@@ -1,0 +1,87 @@
+{% extends 'nhif_app/base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surgical Receipt</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .receipt-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .stamp-container {
+            position: relative;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .stamp-image {
+            position: absolute;
+            transform: translateX(-50%) rotate(-20deg); /* Moves and rotates the stamp */
+            padding: 10px;
+            margin-left: 60%; /* Adjust positioning */
+            border-radius: 30px; /* Rounds the corners */
+            border: 2px solid purple; /* Inner purple border */
+            outline: 2px solid purple; /* Outer purple border */
+            outline-offset: 1px; /* Space between the border and outline */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow */
+        }
+
+        .receipt-header {
+            position: relative;
+        }
+        .stamp-text {
+            font-size: 10px;
+            font-weight: bold;
+            text-align: center;
+            color: purple;
+        }
+        .receipt-header h1 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
+        
+        <div class="receipt-header">
+            <h1>Surgical Receipt</h1>
+        </div>
+        <p><strong>Procedure Cost:</strong> {{ procedure_cost }}</p>
+        {% if has_implant %}
+        <p><strong>Implant Cost:</strong> {{ implant_cost }}</p>
+        {% endif %}
+        <p><strong>Admission Fee:</strong> {{ admission_fee }}</p>
+        <p><strong>Surgeon Fee:</strong> {{ surgeon_fee }}</p>
+        <p><strong>Theatre Fees:</strong> {{ theatre_fees }}</p>
+        <p><strong>Anaesthetic Fee:</strong> {{ anaesthetic_fee }}</p>
+        
+        <div class="stamp-container">
+            <div class="stamp-image">
+                <div class="stamp-text">
+                    Our Lady of Lourdes Mwea Hospital<br>
+                    P.O. Box 51, 10303 Wanguru<br>
+                    Tel: 020-2032382<br>
+                    Cell: 0722160748<br>
+                    Date: {{ current_date }}
+                </div>
+            </div>
+        </div>
+        <p><strong>Laboratory Fees:</strong> {{ laboratory_fees }}</p>
+        <p><strong>Pharmacy Fees:</strong> {{ pharmacy_fees }}</p>
+        <p><strong>Daily Charges Fee:</strong> {{ daily_charges_fee }}</p>
+        <h2><strong>Total Fees:</strong> {{ total_fees }}</h2>
+        
+        <a href="{% url 'surgical_receipt' %}" class="btn btn-primary">Generate Another Receipt</a>
+    </div>
+</body>
+</html>
+{% endblock content %}

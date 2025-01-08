@@ -1,0 +1,63 @@
+{% extends 'nhif_app/base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="receipt">
+            <div class="receipt-header text-center">
+                <h4 class="text-center">Inpatient Surgical Additional Bill</h4>
+            </div>
+            <hr>
+            <div class="receipt-body">
+                
+                <div class="row">
+                    <div class="col-6"><strong>Surgeon Fee:</strong></div>
+                    <div class="col-6 text-end">{{ calculated_fees.surgeon_fee }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><strong>Anaesthetic Fee:</strong></div>
+                    <div class="col-6 text-end">{{ calculated_fees.anaesthetic_fee }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><strong>Theatre Expenses:</strong></div>
+                    <div class="col-6 text-end">{{ calculated_fees.theatreExpenses }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><strong>{{ invoice.Procedure }}:</strong></div>
+                    <div class="col-6 text-end">{{ calculated_fees.procedureamount }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><strong>Implant Charges:</strong></div>
+                    <div class="col-6 text-end">{{ calculated_fees.implantcharges }}</div>
+                </div>
+            </div>
+            <hr>
+            <div class="receipt-footer text-center">
+                <p>Thank you for choosing our services!</p>
+                <a href="{% url 'create_invoice' %}" class="btn btn-secondary">Create Another Invoice</a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .receipt {
+            border: 1px solid #000;
+            padding: 20px;
+            width: 400px; /* Adjust the width as needed */
+            margin: auto;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #f8f9fa; /* Light background for receipt */
+        }
+        .receipt-header, .receipt-footer {
+            margin-bottom: 20px;
+        }
+        .receipt-body {
+            margin-bottom: 20px;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+    </style>
+{% endblock content %}

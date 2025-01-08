@@ -1,0 +1,12 @@
+{% extends 'nhif_app/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div>
+    <!-- Embed the PDF form -->
+    <embed src="{% static 'pdfs/claim_form.pdf' %}" width="100%" height="800px" type="application/pdf">
+</div>
+<!-- Button to print the filled form -->
+<button onclick="window.print()">Print Form</button>
+{% endblock %}

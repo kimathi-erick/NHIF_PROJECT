@@ -1,0 +1,55 @@
+{% extends 'nhif_app/base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surgical Receipt Form</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        function toggleImplantCost() {
+            var hasImplant = document.getElementById('has_implant').checked;
+            var implantCostDiv = document.getElementById('implant_cost_div');
+            if (hasImplant) {
+                implantCostDiv.style.display = 'block';
+            } else {
+                implantCostDiv.style.display = 'none';
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="row">
+    <div class="col-6 offset-2">
+        <div class="container mt-5">
+            <h1>Surgical Receipt Form</h1>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="procedure_cost">Procedure Cost:</label>
+                    <input type="number" step="0.01" name="procedure_cost" id="procedure_cost" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="has_implant" name="has_implant" onchange="toggleImplantCost()">
+                        <label class="form-check-label ml-2" for="has_implant">Has Implant</label>
+                    </div>
+                </div>
+                <div class="form-group" id="implant_cost_div" style="display:none;">
+                    <label for="implant_cost">Implant Cost:</label>
+                    <input type="number" step="0.01" name="implant_cost" id="implant_cost" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Calculate Receipt</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+    
+</body>
+</html>
+
+
+{% endblock content %}

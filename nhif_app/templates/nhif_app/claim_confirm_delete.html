@@ -1,0 +1,17 @@
+{% extends 'nhif_app/base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        Delete NHIF Claim
+    </div>
+    <div class="card-body">
+        <p>Are you sure you want to delete the claim for {{ claim.patient_name }} - {{ claim.procedure }}?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, delete</button>
+            <a class="btn btn-secondary" href="{% url 'claim_detail' claim.pk %}">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

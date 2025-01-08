@@ -1,0 +1,20 @@
+{% extends 'nhif_app/base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h2 class="mb-4">{% if form.instance.pk %}Edit Entry{% else %}New Entry{% endif %}</h2>
+        <form method="post" class="form">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.title.label_tag }}
+                {{ form.title }}
+            </div>
+            <div class="form-group">
+                {{ form.content.label_tag }}
+                {{ form.content }}
+            </div>
+            <button type="submit" class="btn btn-success">Save</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

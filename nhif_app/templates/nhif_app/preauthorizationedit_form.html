@@ -1,0 +1,214 @@
+{% extends 'nhif_app/base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if is_editing %}Edit Preauthorization{% else %}Create Preauthorization{% endif %}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            width: 48%; /* 2 columns with some gap */
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], input[type="email"], input[type="number"], select, textarea {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, input[type="email"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+            border-color: #0056b3;
+            outline: none;
+        }
+
+        /* Styling for checkboxes */
+        .form-checks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            width: 100%;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Adds spacing between checkbox and label */
+            width: 48%; /* Adjust to 48% to fit two checkboxes in a row */
+        }
+
+        .form-check input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #0056b3;
+            transition: transform 0.2s;
+            margin-right: 10px; /* Adds space between the checkbox and the label */
+        }
+
+        .form-check input[type="checkbox"]:checked {
+            transform: scale(1.2);
+        }
+
+        .form-check label {
+            font-weight: normal;
+            font-size: 1em;
+            color: #333;
+        }
+
+        /* Submit button */
+        button {
+            padding: 12px 20px;
+            background-color: #0056b3;
+            color: white;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #003d80;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>{% if is_editing %}Edit Preauthorization{% else %}Create Preauthorization{% endif %}</h1>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- Patient Name -->
+            <div class="form-group">
+                <label for="id_patient_name">Patient Name:</label>
+                {{ form.patient_name }}
+            </div>
+            
+            <!-- Doctor Name -->
+            <div class="form-group">
+                <label for="id_doctor_name">Doctor Name:</label>
+                {{ form.doctor_name }}
+            </div>
+
+            <!-- Procedure -->
+            <div class="form-group">
+                <label for="id_procedure">Procedure:</label>
+                {{ form.procedure }}
+            </div>
+
+            <!-- Expected Surgery Date -->
+            <div class="form-group">
+                <label for="id_expected_surgery_date">Expected Surgery Date:</label>
+                {{ form.expected_surgery_date }}
+            </div>
+
+            <!-- Chief Complaint -->
+            <div class="form-group">
+                <label for="id_chief_complaint">Chief Complaint:</label>
+                {{ form.chief_complaint }}
+            </div>
+
+            <!-- Vital Signs -->
+            <div class="form-group">
+                <label for="id_vital_signs">Vital Signs:</label>
+                {{ form.vital_signs }}
+            </div>
+
+            <!-- History of Present Illness (HPI) -->
+            <div class="form-group">
+                <label for="id_hpi">History of Present Illness (HPI):</label>
+                {{ form.hpi }}
+            </div>
+
+            <!-- Physical Examination -->
+            <div class="form-group">
+                <label for="id_physical_examination">Physical Examination:</label>
+                {{ form.physical_examination }}
+            </div>
+
+            <!-- Investigation Report Details -->
+            <div class="form-group">
+                <label for="id_investigation_report_details">Investigation Report Details:</label>
+                {{ form.investigation_report_details }}
+            </div>
+
+            <!-- Type of Anaesthesia -->
+            <div class="form-group">
+                <label for="id_type_of_anaesthesia">Type of Anaesthesia:</label>
+                {{ form.type_of_anaesthesia }}
+            </div>
+
+            <!-- Checkboxes for Conditions -->
+            <div class="form-checks">
+                <div class="form-check">
+                    <label for="id_is_condition_related_to_employment" class="form-check-label">
+                        {{ form.is_condition_related_to_employment }} -- Is condition related to employment?
+                    </label>
+                </div>
+
+                <div class="form-check">
+                    <label for="id_is_condition_related_to_accident" class="form-check-label">
+                        {{ form.is_condition_related_to_accident }} -- Is condition related to an accident?
+                    </label>
+                </div>
+
+                <div class="form-check" style="width: 100%;">
+                    <label for="id_is_patient_co_insured" class="form-check-label">
+                        {{ form.is_patient_co_insured }} -- Is patient co-insured?
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit">{% if is_editing %}Update Preauthorization{% else %}Create Preauthorization{% endif %}</button>
+        </form>
+    </div>
+
+</body>
+</html>
+{% endblock %}

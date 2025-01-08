@@ -1,0 +1,131 @@
+{% extends 'nhif_app/base.html' %}
+
+{% block extra_css %}
+<style>
+    .document-list {
+        margin-top: 20px;
+    }
+    .document-list ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    .document-list li {
+        padding: 10px;
+        border-bottom: 1px solid #dee2e6;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .document-list li:last-child {
+        border-bottom: none;
+    }
+    .document-list a {
+        text-decoration: none;
+        color: #007bff;
+    }
+    .document-list a:hover {
+        text-decoration: underline;
+    }
+    .btn-custom {
+        margin-right: 10px;
+    }
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 3px;
+    }
+    .btn-delete:hover {
+        background-color: #c82333;
+    }
+    .pagination {
+        justify-content: center;
+    }
+    .search-container {
+        margin-bottom: 20px;
+    }
+    .search-input {
+        width: 100%;
+        max-width: 400px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Documents for Claim {{ claim.nhif_number }}</h1>
+
+    <div class="search-container">
+        <form method="get" action="{% url 'document_list' claim.pk %}" class="form-inline">
+            <input type="text" name="search" placeholder="Search documents..." class="form-control search-input" value="{{ request.GET.search }}">
+            <button type="submit" class="btn btn-primary ml-2">Search</button>
+        </form>
+    </div>
+
+    <div class="document-list">
+        {% if documents %}
+        <ul class="list-group">
+            {% for document in documents %}
+            <li class="list-group-item">
+                <div>
+                    <a href="{% url 'document_download' document.id %}">{{ document.document_name }}</a> 
+                    <span class="text-muted">(Uploaded on {{ document.uploaded_at }})</span>
+                </div>
+                <form method="post" action="{% url 'document_delete' document.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-delete btn-sm">Delete</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <!-- Pagination controls -->
+        <div class="mt-4">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% else %}
+        <p>No documents found.</p>
+        {% endif %}
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'upload_document' claim.pk %}" class="btn btn-primary btn-custom">Upload New Document</a>
+        <a href="{% url 'claim_list' %}" class="btn btn-secondary btn-custom">Back to Claims List</a>
+    </div>
+</div>
+{% endblock %}

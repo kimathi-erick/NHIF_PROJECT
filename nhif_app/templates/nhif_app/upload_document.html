@@ -1,0 +1,51 @@
+{% extends 'nhif_app/base.html' %}
+
+{% block extra_css %}
+<style>
+    .upload-container {
+        margin-top: 20px;
+    }
+    .upload-container h1 {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        font-weight: bold;
+    }
+    .form-control {
+        margin-bottom: 10px;
+    }
+    .btn-custom {
+        margin-top: 10px;
+    }
+    .back-link {
+        display: inline-block;
+        margin-top: 10px;
+        color: #007bff;
+        text-decoration: none;
+    }
+    .back-link:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container upload-container">
+    <h1>Upload Document for Claim {{ claim.nhif_number }}</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_document_name">Document Name:</label>
+            {{ form.document_name }}
+        </div>
+        <div class="form-group">
+            <label for="id_document">Choose File:</label>
+            {{ form.document }}
+        </div>
+        <button type="submit" class="btn btn-primary btn-custom">Upload</button>
+    </form>
+
+    <a href="{% url 'document_list' claim.pk %}" class="back-link">Back to Documents List</a>
+</div>
+{% endblock %}

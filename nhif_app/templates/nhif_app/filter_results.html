@@ -1,0 +1,88 @@
+{% extends 'nhif_app/base.html' %}
+
+{% block title %}Filter Results{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <form method="get" action="" class="mb-4">
+        <div class="row">
+            {% for field in form %}
+                <div class="col">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary m-3">Filter</button>
+    </form>
+    {% if page_obj.object_list %}
+        <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Claim Number</th>
+                        <th>Admission Date</th>
+                        <th>Discharge Date</th>
+                        <th>Stage</th>
+                        <th>Member Number</th>
+                        <th>Dependent Number</th>
+                        <th>Patient Number</th>
+                        <th>Patient Name</th>
+                        <th>Invoice Number</th>
+                        <th>Expected Claim</th>
+                        <th>Claim Date</th>
+                        <th>Cheque Number</th>
+                        <th>Cheque Date</th>
+                        <th>EFT Transaction Number</th>
+                        <th>EFT Batch No</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in page_obj %}
+                        <tr>
+                            <td>{{ item.ClaimNumber }}</td>
+                            <td>{{ item.AdmissionDate }}</td>
+                            <td>{{ item.DischargeDate }}</td>
+                            <td>{{ item.Stage }}</td>
+                            <td>{{ item.MemberNumber }}</td>
+                            <td>{{ item.DependentNumber }}</td>
+                            <td>{{ item.PatientNumber }}</td>
+                            <td>{{ item.PatientName }}</td>
+                            <td>{{ item.InvoiceNumber }}</td>
+                            <td>{{ item.ExpectedClaim }}</td>
+                            <td>{{ item.ClaimDate }}</td>
+                            <td>{{ item.ChequeNumber }}</td>
+                            <td>{{ item.ChequeDate }}</td>
+                            <td>{{ item.EFTTransactionNumber }}</td>
+                            <td>{{ item.EFTBatchNo }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                {% endif %}
+        
+                <li class="page-item active">
+                    <span class="page-link">{{ page_obj.number }}</span>
+                </li>
+        
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+</div>
+{% endblock %}

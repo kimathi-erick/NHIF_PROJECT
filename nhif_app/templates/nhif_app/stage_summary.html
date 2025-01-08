@@ -1,0 +1,74 @@
+{% extends 'nhif_app/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    
+    <h3 class="mt-4">Visualization</h3>
+    <canvas id="stageChart"></canvas>
+    <h2>Stage-wise Total Expected Claims</h2>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Stage</th>
+                <th>Total Expected Claim (KES)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stage_total in stage_totals %}
+                <tr>
+                    <td>{{ stage_total.Stage }}</td>
+                    <td>{{ stage_total.total_claim }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+<!-- Chart.js Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const stageData = {
+        labels: [{% for stage_total in stage_totals %}"{{ stage_total.Stage }}",{% endfor %}],
+        datasets: [{
+            label: 'Total Expected Claim',
+            data: [{% for stage_total in stage_totals %}{{ stage_total.total_claim }},{% endfor %}],
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.2)', // TA
+                'rgba(255, 99, 132, 0.2)', // AP
+                'rgba(255, 206, 86, 0.2)', // AA
+                'rgba(54, 162, 235, 0.2)', // AD
+                'rgba(255, 159, 64, 0.2)', // RH
+                'rgba(153, 102, 255, 0.2)', // DS
+                'rgba(255, 99, 132, 0.2)', // XX
+                'rgba(75, 192, 192, 0.2)', // Add more colors as needed
+                // You can add more colors corresponding to the number of stages you have
+            ],
+            borderColor: [
+                'rgba(75, 192, 192, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 99, 132, 1)',
+                // Match these with the background colors
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    const config = {
+        type: 'bar',
+        data: stageData,
+        options: {
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    };
+
+    new Chart(document.getElementById('stageChart'), config);
+</script>
+{% endblock %}

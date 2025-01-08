@@ -1,0 +1,80 @@
+{% extends 'nhif_app/base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header text-center">
+        {{ form.instance.pk|yesno:"Update Claim,Create Claim" }}
+    </div>
+    <div class="card-body">
+        <div style="display: flex; justify-content: center;">
+            <div style="width: 50%;">
+                <form method="post">
+                    {% csrf_token %}
+                    <!-- Form fields in a grid-like layout -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="id_nhif_number">NHIF Number</label>
+                            {{ form.nhif_number }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_patient_name">Patient Name</label>
+                            {{ form.patient_name }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_procedure">Procedure</label>
+                            {{ form.procedure }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_amount">Amount</label>
+                            {{ form.amount }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_status">Status</label>
+                            {{ form.status }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_dr_code">Doctor Code</label>
+                            {{ form.dr_code }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_date">Date</label>
+                            {{ form.date }}
+                        </div>
+                        <div class="form-group d-flex justify-content-center bg-dark text-light" id="done-check" style="display: none;">
+                            <div class="form-check">
+                              {{ form.done }}
+                              <label class="form-check-label ml-2" for="id_done">Check Only If Approved and Done</label>
+                            </div>
+                        </div>
+                        <div style="grid-column: span 2; display: flex; justify-content: space-between;">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <a class="btn btn-secondary" href="{% url 'claim_list' %}">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const statusSelect = document.getElementById('id_status');
+        const doneCheck = document.getElementById('done-check');
+
+        function toggleDoneCheck() {
+            if (statusSelect.value === 'approved') {
+                doneCheck.style.display = 'flex';
+            } else {
+                doneCheck.style.display = 'none';
+            }
+        }
+
+        // Initial check in case the page is loaded with status already set to approved
+        toggleDoneCheck();
+
+        // Add event listener to toggle visibility on change
+        statusSelect.addEventListener('change', toggleDoneCheck);
+    });
+</script>
+{% endblock %}

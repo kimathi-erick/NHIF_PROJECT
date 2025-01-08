@@ -1,0 +1,20 @@
+{% extends 'nhif_app/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title text-center">Morgue Bill</h1>
+        </div>
+        <div class="card-body text-center">
+            <p class="lead">Total Cost: KSh {{ total_cost }}</p>
+            <p class="lead">Days in Morgue: {{ billing.calculate_days_in_morgue }}</p>
+            <p class="lead">Body Type: {{ billing.get_body_type_display }}</p>
+            <p class="lead">Age Group: {{ billing.get_age_group_display }}</p>
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'calculate_billing' %}" class="btn btn-primary">Calculate Another</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

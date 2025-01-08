@@ -1,0 +1,107 @@
+{% extends 'nhif_app/base.html' %}
+
+{% block content %}
+<h1>NHIF Claims</h1>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <form method="get" action="{% url 'claim_list' %}" class="form-inline">
+            <input class="form-control mr-sm-2" type="search" name="nhif_number" placeholder="NHIF Number" aria-label="Search" value="{{ request.GET.nhif_number }}">
+            <input class="form-control mr-sm-2" type="search" name="patient_name" placeholder="Patient Name" aria-label="Search" value="{{ request.GET.patient_name }}">
+            <input class="form-control mr-sm-2" type="date" name="date" placeholder="Date" aria-label="Search" value="{{ request.GET.date }}">
+            <select class="form-control mr-sm-2" name="status">
+                <option value="">Status</option>
+                {% for value, label in status_choices %}
+                    <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            <select class="form-control mr-sm-2" name="dr_code">
+                <option value="">Doctor's Names</option>
+                {% for value, label in doctor_choices %}
+                    <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="done" id="done" value="true" {% if request.GET.done %}checked{% endif %}>
+                <label class="form-check-label text-primary" for="done">Approved & Done</label>
+            </div>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Filter</button>
+        </form>
+    </div>
+</nav>
+
+
+<button onclick="window.print()" class="btn btn-primary mb-3">Print</button>
+
+<table class="table table-bordered table-hover table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">DATE</th>
+            <th scope="col">NHIF NUMBER</th>
+            <th scope="col">PATIENT</th>
+            <th scope="col">PROCEDURE</th>
+            <th scope="col">AMOUNT</th>
+            <th scope="col">DOCTOR</th>
+            <th scope="col">STATUS</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for claim in filtered_claims %}
+        <tr>
+            <td>{{ claim.date }}</td>
+            <td><a href="{% url 'claim_detail' claim.pk %}">{{ claim.nhif_number }}</a></td>
+            <td>{{ claim.patient_name }}</td>
+            <td>{{ claim.procedure }}</td>
+            <td>{{ claim.amount }}</td>
+            <td>{{ claim.dr_code }}</td>
+            <td class="{% if claim.status == 'declined' %}table-danger{% elif claim.status == 'pending' %}table-warning{% elif claim.status == 'approved' %}table-success{% endif %}">
+                {{ claim.status }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    @media print {
+        /* Hide the print button when printing */
+        button {
+            display: none;
+        }
+
+        /* Optional: Adjust table styles for print */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: transparent;
+        }
+
+        .thead-dark th {
+            color: black;
+            background-color: white;
+        }
+
+        .table-danger {
+            background-color: red !important;
+        }
+
+        .table-warning {
+            background-color: yellow !important;
+        }
+
+        .table-success {
+            background-color: green !important;
+        }
+    }
+</style>
+{% endblock %}

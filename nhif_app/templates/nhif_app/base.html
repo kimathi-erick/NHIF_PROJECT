@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NHIF Claims Management</title>
+    <!-- Bootstrap CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+
+    
+    {% block extra_css %}{% endblock %}
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar a {
+            text-decoration: none;
+            color: black; /* Default link color */
+            padding: 10px 15px;
+            transition: color 0.3s ease, background-color 0.3s ease; /* Smooth transition */
+        }
+
+        .navbar a:hover {
+            color: white; /* Link color on hover */
+            background-color: #007bff; /* Background color on hover */
+            border-radius: 5px; /* Optional: rounded corners */
+        }
+        h1{
+            font-size: small;
+        }
+        h2{
+            font-size: small;
+        }
+        h3{
+            font-size: small;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-primary bg-light" style="font-size: 11px;">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <!-- Preauth Links Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="preauthDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Preauth
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="preauthDropdown">
+                        <a class="dropdown-item" href="{% url 'preauthorization_form' %}">Preauth form</a>
+                        <a class="dropdown-item" href="{% url 'preauthorization_list' %}"><i class="fas fa-briefcase-medical"></i> Preauths List</a>
+                        <a class="dropdown-item" href="{% url 'preauthorization_form' %}"><i class="fas fa-plus-circle"></i> Create Preauth</a>
+                    </div>
+                </li>
+    
+                <!-- Diary Links Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="diaryDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Diary
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="diaryDropdown">
+                        <a class="dropdown-item" href="{% url 'entry_new' %}"><i class="fas fa-plus-square"></i> Create Diary</a>
+                        <a class="dropdown-item" href="{% url 'entry_list' %}"><i class="fas fa-book"></i> Dear Diary</a>
+                    </div>
+                </li>
+    
+                <!-- Document Links Dropdown -->
+                <!-- <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="documentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Documents
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="documentDropdown">
+                        {% if claim.pk %}
+                            <a class="dropdown-item" href="{% url 'upload_document' claim.pk %}"><i class="fas fa-upload"></i> Upload Document</a>
+                            <a class="dropdown-item" href="{% url 'document_list' claim.pk %}"><i class="fas fa-file-alt"></i> Documents List</a>
+                        {% else %}
+                            <span class="dropdown-item disabled"><i class="fas fa-upload"></i> Upload Document</span>
+                        {% endif %}
+                    </div>
+                </li> -->
+    
+                <!-- Dialysis and Renal Links Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dialysisDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dialysis / Renal
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dialysisDropdown">
+                        <a class="dropdown-item" href="{% url 'dialysis_management' %}"><i class="fas fa-stethoscope"></i> Dialysis Management</a>
+                        <a class="dropdown-item" href="{% url 'create_patient' %}">Renal Patient</a>
+                    </div>
+                </li>
+    
+                <!-- Additional Links -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'document_merge' %}">Merge & Convert</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'pdf_form' %}">Sha-Form</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'icd11_browser' %}">icd11_browser</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_invoice' %}"><i class="fas fa-calculator"></i> Surg.W</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'surgical_receipt' %}"><i class="fas fa-file-invoice"></i> Preauth Receipt</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'calculate_billing' %}"><i class="fas fa-cash-register"></i> Morgue</a>
+                </li>
+                <!-- Claims Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="claimsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Claims
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="claimsDropdown">
+                        <a class="dropdown-item" href="{% url 'upload_file' %}"><i class="fas fa-file-excel"></i> Upload Claims</a>
+                        <a class="dropdown-item" href="{% url 'filter_data' %}"><i class="fas fa-money-bill-wave"></i> Claims</a>
+                    </div>
+                </li>
+
+    
+                <!-- Admin and Other Links -->
+                {% if user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" style="font-style: italic;" href="{% url 'admin:index' %}" target="_blank">
+                            <i class="fas fa-cogs"></i> <strong><i class="fas fa-user-shield"></i> Admin</strong>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <form action="{% url 'delete_excel_data' %}" method="POST" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Delete Claims</button>
+                        </form>
+                    </li>
+                {% endif %}
+    
+                <!-- Authentication Links -->
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    
+    
+
+    <div class="container-fluid mt-4" style="font-size: 12px;">
+     <div>
+        {% block content %}
+        {% endblock %}
+
+     </div>
+        
+    </div>
+    
+    <!-- Bootstrap JS and dependencies -->
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5-1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
