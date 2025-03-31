@@ -1,0 +1,111 @@
+{% extends 'nhif_app/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Discharge Form</h2>
+    
+    <form method="POST" class="needs-validation" novalidate onsubmit="return validateDates()">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="number" class="form-label">Number</label>
+                <input type="text" class="form-control" id="number" name="number" required>
+                <div class="invalid-feedback">Please enter the patient number.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="inpatient_number" class="form-label">Inpatient Number</label>
+                <input type="text" class="form-control" id="inpatient_number" name="inpatient_number" required>
+                <div class="invalid-feedback">Please enter the inpatient number.</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="patient_name" class="form-label">Patient Name</label>
+                <input type="text" class="form-control" id="patient_name" name="patient_name" required>
+                <div class="invalid-feedback">Please enter the patient's name.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="date_of_birth" class="form-label">Date of Birth</label>
+                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
+                <div class="invalid-feedback">Please select the date of birth.</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="date_of_admission" class="form-label">Date of Admission</label>
+                <input type="date" class="form-control" id="date_of_admission" name="date_of_admission" required>
+                <div class="invalid-feedback">Please select the date of admission.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="date_of_discharge" class="form-label">Date of Discharge</label>
+                <input type="date" class="form-control" id="date_of_discharge" name="date_of_discharge" required>
+                <div class="invalid-feedback">Please select the date of discharge.</div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="ward_type" class="form-label">Ward Type</label>
+            <select class="form-select" id="ward_type" name="ward_type" required>
+                <option value="" selected disabled>Select Ward Type</option>
+                <option value="ICU/HDU">ICU/HDU</option>
+                <option value="Medical">Medical</option>
+                <option value="Surgical">Surgical</option>
+                <option value="Amenity">Amenity</option>
+                <option value="Maternity">Maternity</option>
+                <option value="Gynecology">Gynecology</option>
+                <option value="Pediatrics">Pediatrics</option>
+            </select>
+            <div class="invalid-feedback">Please select the ward type.</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="amount" class="form-label">Amount</label>
+            <input type="number" class="form-control" id="amount" name="amount" required>
+            <div class="invalid-feedback">Please enter the amount.</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Record</button>
+    </form>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'view_excel_data' %}" class="btn btn-info">View Excel Data</a>
+    </div>
+</div>
+
+<script>
+    // Bootstrap client-side validation
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            var forms = document.getElementsByClassName('needs-validation');
+            Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+
+    // Function to validate the Date of Admission and Date of Discharge
+    function validateDates() {
+        var doa = document.getElementById('date_of_admission').value;
+        var dod = document.getElementById('date_of_discharge').value;
+
+        if (doa && dod) {
+            if (new Date(dod) < new Date(doa)) {
+                alert('Error: Date of Discharge cannot be earlier than Date of Admission!');
+                return false; // Prevent form submission
+            }
+        }
+        return true; // Allow form submission
+    }
+</script>
+
+{% endblock content %}

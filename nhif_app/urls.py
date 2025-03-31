@@ -5,7 +5,13 @@ from .views import surgical_receipt
 from django.contrib.auth.views import LogoutView
 from .views import custom_login_view,create_update_patient
 
+
+def ads_txt(request):
+    content = "google.com, pub-2289698734353242, DIRECT, f08c47fec0942fa0"
+    return HttpResponse(content, content_type="text/plain")
+
 urlpatterns = [
+    path("ads.txt", ads_txt),
     path('login/', custom_login_view, name='login'),  # Custom login view
     path('logout/', LogoutView.as_view(), name='logout'),  # Built-in LogoutView
     path('', views.claim_list, name='claim_list'),
@@ -40,7 +46,18 @@ urlpatterns = [
     path('preauthorizations/', views.preauthorization_list, name='preauthorization_list'),  # List view
     path('preauthorizations/edit/<int:pk>/', views.preauthorization_edit, name='preauthorization_edit'),  # Edit view
     path('preauthorizations/delete/<int:pk>/', views.preauthorization_delete, name='preauthorization_delete'),  # Delete view
-    
+    path('save/', views.save_discharge_record, name='save_discharge_record'),
+    path('download/', views.download_excel, name='download_excel'),
+    path('view-excel/', views.view_excel_data, name='view_excel_data'),
+    path('delete/<int:record_number>/', views.delete_record, name='delete_record'),
+    path('edit-record/<int:record_id>/', views.edit_discharge_record, name='edit_discharge_record'),
+    path('daily-summary/', views.daily_summary_view, name='daily_summary'),
+    path('daily-tally/', views.daily_tally_view, name='daily_tally'),
+    path('export-excel/', views.export_to_excel, name='export_excel'),
+    path('daily-summary/edit/<int:pk>/', views.edit_daily_summary, name='edit_daily_summary'),
+    path('daily-summary/delete/<int:pk>/', views.delete_daily_summary, name='delete_daily_summary'),
+    path('daily-summary-list/', views.daily_summary_list, name='daily_summary_list'),
 
-   
+
+
 ]

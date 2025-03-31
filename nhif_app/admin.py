@@ -10,3 +10,7 @@ admin.site.register(InpatientInvoice)
 admin.site.register(Patient)
 admin.site.register(RenalDialysisRecord)
 admin.site.register(Preauthorization)
+admin.site.register(DischargeRecord)
+admin.site.register(DailySummary)
+admin.site.register(DailyTally)
+

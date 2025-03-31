@@ -7,15 +7,81 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .login-container {
-            max-width: 400px;
+            max-width: 500px;
             margin-top: 100px;
         }
         .login-card {
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.2); /* Glass effect */
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease-in-out;
         }
+
+        /* Add hover effect */
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Add slight inner glow effect */
+        .login-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
+            z-index: -1;
+        }
+
+        /* Improve text inside card */
+        .login-card h2 {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.5);
+            font-size: 1rem;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .login-card input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.5);
+        }
+
+        .login-card button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .login-card button:hover {
+            background: linear-gradient(135deg, #5563d0, #5d3a9b);
+            transform: scale(1.05);
+        }
+
         .alert-warning {
             border-radius: 5px;
         }
@@ -27,17 +93,17 @@
     <div class="row justify-content-center">
         <div class="col-12">
             <div class="login-card">
-                <marquee behavior="alternate" direction="left" style="font-size: 1.5rem; color: #007bff;">
-                    Welcome
+                <marquee  direction="right" style="font-size: 1.0rem; color: #007bff;">
+                    ✨ "Welcome! Elevate, Innovate, and Dominate!"🎯
                 </marquee>
                 <form method="post" novalidate>
                     {% csrf_token %}
                     <div class="mb-3">
-                        {{ form.username.label_tag }}
+                        📛{{ form.username.label_tag }}
                         <input type="text" name="username" id="{{ form.username.id_for_label }}" class="form-control" value="{{ form.username.value|default_if_none:'' }}">
                     </div>
                     <div class="mb-3">
-                        {{ form.password.label_tag }}
+                        🔑{{ form.password.label_tag }}
                         <input type="password" name="password" id="{{ form.password.id_for_label }}" class="form-control" value="{{ form.password.value|default_if_none:'' }}">
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Login</button>

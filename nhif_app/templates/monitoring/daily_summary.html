@@ -1,0 +1,58 @@
+{% extends 'nhif_app/base.html' %}
+
+{% block content %}
+    <style>
+        /* Parallax Background */
+        .parallax {
+            background-image: url('https://source.unsplash.com/1600x900/?hospital,health'); /* Replace with your image */
+            min-height: 100vh;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 0;
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            max-height: 80vh;
+            overflow-y: auto; /* Enables scrolling inside */
+        }
+
+        h4 {
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .btn-custom {
+            width: 100%;
+            font-size: 18px;
+        }
+    </style>
+
+    <div class="parallax">
+        <div class="glass-card">
+            <h4 class="text-primary">📊 Daily Summary</h4>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.as_p }}
+                </div>
+                <button type="submit" class="btn btn-primary btn-custom">🚀 Submit</button>
+            </form>
+
+        </div>
+    </div>
+{% endblock %}

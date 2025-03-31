@@ -1,0 +1,91 @@
+{% extends 'nhif_app/base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="text-center">✅ Discharged Patients List 📋</h2>
+
+    <!-- Filter Form (Fixed at the Top) -->
+    <div class="sticky-top bg-white p-3 shadow rounded">
+        <form method="GET" action="{% url 'view_excel_data' %}" class="form-inline offset-3">
+            <div class="form-group mb-2">
+                <label for="ward_type"class="text px-3">Ward Type:</label>
+                <select name="ward_type" id="ward_type" class="form-control">
+                    <option value="">All</option>
+                    <option value="ICU/HDU" {% if request.GET.ward_type == "ICU/HDU" %}selected{% endif %}>ICU/HDU</option>
+                    <option value="Maternity" {% if request.GET.ward_type == "Maternity" %}selected{% endif %}>Maternity</option>
+                    <option value="Surgical" {% if request.GET.ward_type == "Surgical" %}selected{% endif %}>Surgical</option>
+                    <option value="Medical" {% if request.GET.ward_type == "Medical" %}selected{% endif %}>Medical</option>
+                    <option value="Gynecology" {% if request.GET.ward_type == "Gynecology" %}selected{% endif %}>Gynecology</option>
+                    <option value="Pediatrics" {% if request.GET.ward_type == "Pediatrics" %}selected{% endif %}>Pediatrics</option>
+                    <option value="Amenity" {% if request.GET.ward_type == "Amenity" %}selected{% endif %}>Amenity</option>
+                </select>
+            </div>
+
+            <div class="form-group mb-2 ml-2">
+                <label for="patient_name" class="text px-3">Patient Name:</label>
+                <input type="text" name="patient_name" id="patient_name" class="form-control"
+                       value="{{ request.GET.patient_name }}" placeholder="Enter patient name">
+            </div>
+
+            <button type="submit" class="btn btn-primary mb-2 ml-2 px-3">Filter</button>
+        </form>
+    </div>
+
+    <br>
+    <a href="{% url 'view_excel_data' %}?download=true{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}"
+       class="btn btn-success">Download Data as Excel</a>
+
+    <!-- Display Excel Data -->
+    {% if table_data %}
+        <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Number</th>
+                        <th>Patient Name</th>
+                        <th>Date of Birth</th>
+                        <th>Date of Admission</th>
+                        <th>Date of Discharge</th>
+                        <th>Inpatient Number</th>
+                        <th>Ward Type</th>
+                        <th>Claim Number</th>
+                        <th>Days Spent</th>
+                        <th>Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in table_data %}
+                        <tr>
+                            <td>{{ record.number }}</td>
+                            <td>{{ record.patient_name }}</td>
+                            <td>{{ record.date_of_birth }}</td>
+                            <td>{{ record.date_of_admission }}</td>
+                            <td>{{ record.date_of_discharge }}</td>
+                            <td>{{ record.inpatient_number }}</td>
+                            <td>{{ record.ward_type }}</td>
+                            <td>{{ record.claim_number }}</td>
+                            <td>{{ record.days_spent }}</td>
+                            <td>{{ record.amount }}</td>
+                            <td>
+                                <form action="{% url 'delete_record' record.number %}" method="POST" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>
+                                </form>
+                            </td>
+                            <td>
+                                <a href="{% url 'edit_discharge_record' record.number %}" class="btn btn-warning btn-sm">Edit</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-danger">No records match the filter criteria.</p>
+    {% endif %}
+
+    <br>
+</div>
+{% endblock content %}

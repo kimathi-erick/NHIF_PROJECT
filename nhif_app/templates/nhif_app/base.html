@@ -8,11 +8,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2289698734353242"
+     crossorigin="anonymous"></script>
 
 
-    
+
     {% block extra_css %}{% endblock %}
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- Latest Font Awesome (6.x) from jsDelivr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         .navbar a {
             text-decoration: none;
@@ -35,12 +39,44 @@
         h3{
             font-size: small;
         }
+        .navbar-toggler-icon {
+        background-color: #007bff; /* Blue background for better visibility */
+        border: 1px solid black; /* Optional: adds clarity to the button */
+        }
+        .card {
+          background: #fff;
+          border-radius: 10px;
+          padding: 20px;
+          box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+          transform: scale(0.9); /* Default zoomed-out state */
+          transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
 
-        
+        .card:hover {
+          transform: scale(1); /* Zoom-in to normal size */
+          box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        #quote-box {
+            text-align: center;
+            padding: 15px;
+            font-size: 1.1em;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            margin: 5px 0;
+        }
+        #quote-text {
+            color: green;  /* Make text green */
+            font-style: italic; /* Italicize text */
+            font-weight: bold; /* Optional: Make it bold */
+        }
+
+
+
+
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-primary bg-light" style="font-size: 11px;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="font-size: 11px;">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -57,7 +93,7 @@
                         <a class="dropdown-item" href="{% url 'preauthorization_form' %}"><i class="fas fa-plus-circle"></i> Create Preauth</a>
                     </div>
                 </li>
-    
+
                 <!-- Diary Links Dropdown -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="diaryDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -68,7 +104,7 @@
                         <a class="dropdown-item" href="{% url 'entry_list' %}"><i class="fas fa-book"></i> Dear Diary</a>
                     </div>
                 </li>
-    
+
                 <!-- Document Links Dropdown -->
                 <!-- <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="documentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -83,7 +119,7 @@
                         {% endif %}
                     </div>
                 </li> -->
-    
+
                 <!-- Dialysis and Renal Links Dropdown -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="dialysisDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -94,15 +130,11 @@
                         <a class="dropdown-item" href="{% url 'create_patient' %}">Renal Patient</a>
                     </div>
                 </li>
-    
+
                 <!-- Additional Links -->
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'document_merge' %}">Merge & Convert</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'pdf_form' %}">Sha-Form</a>
-                </li>
-                
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'icd11_browser' %}">icd11_browser</a>
                 </li>
@@ -115,6 +147,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'calculate_billing' %}"><i class="fas fa-cash-register"></i> Morgue</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'save_discharge_record' %}"> Discharges Form</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_excel_data' %}">Discharges View</a>
+                </li>
                 <!-- Claims Dropdown -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="claimsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -125,8 +163,27 @@
                         <a class="dropdown-item" href="{% url 'filter_data' %}"><i class="fas fa-money-bill-wave"></i> Claims</a>
                     </div>
                 </li>
+                <!-- Hospital Summaries Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="hospitalSummaryDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Hospital Summaries
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="hospitalSummaryDropdown">
+                        <a class="dropdown-item" href="{% url 'daily_summary_list' %}">
+                            📊 Monitoring Tool
+                        </a>
+                        <a class="dropdown-item" href="{% url 'daily_summary' %}">
+                            📖 Daily Record Form
+                        </a>
+                        <a class="dropdown-item" href="{% url 'daily_tally' %}">
+                            📋 Daily Tally Form
+                        </a>
 
-    
+                    </div>
+                </li>
+
+
+
                 <!-- Admin and Other Links -->
                 {% if user.is_superuser %}
                     <li class="nav-item">
@@ -141,7 +198,7 @@
                         </form>
                     </li>
                 {% endif %}
-    
+
                 <!-- Authentication Links -->
                 {% if user.is_authenticated %}
                     <li class="nav-item">
@@ -158,18 +215,95 @@
             </ul>
         </div>
     </nav>
-    
-    
 
     <div class="container-fluid mt-4" style="font-size: 12px;">
-     <div>
+     <div class="card">
+         <div id="quote-box">
+            <p id="quote-text">Loading quote...</p>
+        </div>
         {% block content %}
+
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2289698734353242"
+        crossorigin="anonymous"></script>
+        <!-- kim -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-2289698734353242"
+             data-ad-slot="3856851506"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
         {% endblock %}
 
      </div>
-        
+
     </div>
-    
+
+
+    <script>
+        const quotes = [
+        "🔥 Success is not final, failure is not fatal: it is the courage to continue that counts.",
+        "💡 The only limit to our realization of tomorrow is our doubts of today.",
+        "🎯 Do what you can, with what you have, where you are.",
+        "🚀 Believe you can and you're halfway there.",
+        "⚡ Opportunities don't happen, you create them.",
+        "⏳ Your time is limited, so don’t waste it living someone else’s life.",
+        "😊 Happiness is not something ready-made. It comes from your own actions.",
+        "⏰ Don’t watch the clock; do what it does. Keep going.",
+        "🎨 Everything you can imagine is real.",
+        "💎 Strive not to be a success, but rather to be of value.",
+        "💪 Courage is not having the strength to go on; it is going on when you don’t have the strength.",
+        "🌟 Dream big and dare to fail.",
+        "🔥 Hardships often prepare ordinary people for an extraordinary destiny.",
+        "🎭 You only live once, but if you do it right, once is enough.",
+        "🚪 If opportunity doesn’t knock, build a door.",
+        "🏆 It always seems impossible until it’s done.",
+        "❤️ Act as if what you do makes a difference. It does.",
+        "🌱 Life isn’t about finding yourself. Life is about creating yourself.",
+        "👑 If you want to achieve greatness, stop asking for permission.",
+        "🏀 You miss 100% of the shots you don’t take.",
+        "🔮 The best way to predict the future is to create it.",
+        "🎯 You are never too old to set another goal or to dream a new dream.",
+        "🚀 The only way to do great work is to love what you do.",
+        "🔥 Do what you love and success will follow. Passion is the fuel behind a successful career.",
+        "🤯 To live a creative life, we must lose our fear of being wrong.",
+        "🎯 The successful warrior is the average man, with laser-like focus.",
+        "⚡ We generate fears while we sit. We overcome them by action.",
+        "💪 Failure will never overtake me if my determination to succeed is strong enough.",
+        "🏆 The harder the battle, the sweeter the victory.",
+        "💡 Innovation distinguishes between a leader and a follower.",
+        "🍀 I find that the harder I work, the more luck I seem to have.",
+        "🎢 Life is 10% what happens to us and 90% how we react to it.",
+        "🎖️ Good things come to people who wait, but better things come to those who go out and get them.",
+        "🏅 Don't let the fear of losing be greater than the excitement of winning.",
+        "🌍 People who are crazy enough to think they can change the world, are the ones who do.",
+        "🤖 Creativity is intelligence having fun.",
+        "🛤️ The road to success and the road to failure are almost exactly the same.",
+        "📖 The only place where success comes before work is in the dictionary.",
+        "⏳ Your limitation—it's only your imagination.",
+        "✨ Great things never come from comfort zones.",
+        "🔥 Dream it. Wish it. Do it.",
+        "⚡ Push yourself, because no one else is going to do it for you.",
+        "⏰ Sometimes later becomes never. Do it now.",
+        "🧩 Little things make big days.",
+        "💰 The secret of success is to do the common things uncommonly well.",
+        "🚧 Difficult roads often lead to beautiful destinations.",
+        "🌅 Rise up, start fresh, see the bright opportunity in each day.",
+        "🔑 Discipline is the bridge between goals and accomplishment.",
+        "📈 Success is not just about making money. It's about making a difference.",
+        "🎤 Speak your mind, even if your voice shakes."
+    ];
+        function showRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            document.getElementById('quote-text').innerText = quotes[randomIndex];
+        }
+
+        // Show a random quote on page load
+        window.onload = showRandomQuote;
+    </script>
+
     <!-- Bootstrap JS and dependencies -->
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

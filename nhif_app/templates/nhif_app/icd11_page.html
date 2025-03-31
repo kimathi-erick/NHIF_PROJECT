@@ -8,9 +8,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICD-11 Browser</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Make iframe container take up more space */
+        .embed-responsive {
+            position: relative;
+            display: block;
+            height: 50vh; /* Adjust this to take up more height on mobile */
+            max-height: 100vh; /* Limit to the full height of the viewport */
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .embed-responsive iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Ensure the iframe takes up more space in mobile mode */
+        @media (max-width: 768px) {
+            .embed-responsive {
+                height: 75vh; /* Adjust this value for better height on smaller screens */
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container-fluid my-4">
+    <div class="container-fluid p-0">
         <div class="embed-responsive embed-responsive-16by9">
             <iframe class="embed-responsive-item" src="https://icd.who.int/browse/2024-01/mms/en#1405405864" allowfullscreen></iframe>
         </div>

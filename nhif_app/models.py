@@ -2,6 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.contrib.auth.models import User
+from datetime import date
 
 class Entry(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,null=True, blank=True)
@@ -63,22 +64,22 @@ class MorgueBilling(models.Model):
         ('outside', 'Outside Hospital'),
         ('inside', 'Inside Hospital'),
     ]
-    
+
     AGE_GROUPS = [
         ('adult', 'Adult'),
         ('child', 'Child'),
     ]
-    
+
     body_type = models.CharField(max_length=10, choices=BODY_TYPES)
     age_group = models.CharField(max_length=10, choices=AGE_GROUPS, default='adult')
     body_income_date = models.DateField(default=timezone.now)
     body_release_date = models.DateField(null=True, blank=True)
-    
+
     def calculate_total(self):
         # Initialize default costs
         preparation_cost = 0
         sheet_cost = 0
-        
+
         if self.body_type == 'outside':
             preparation_cost = 2000
             sheet_cost = 500 if self.age_group == 'adult' else 250
@@ -122,7 +123,7 @@ class ExcelData(models.Model):
     ChequeNumber = models.CharField(max_length=255)
     ChequeDate = models.CharField(max_length=255)
     EFTTransactionNumber = models.CharField(max_length=255)
-    EFTBatchNo = models.CharField(max_length=255)    
+    EFTBatchNo = models.CharField(max_length=255)
 
 class InpatientInvoice(models.Model):
     ApprovedAmount = models.FloatField()
@@ -165,7 +166,7 @@ class Patient(models.Model):
     facility_name = models.CharField(default="Our Lady Of Lourdes Mwea Hospital",max_length=100)  # New field for name of facility
     idnumber = models.CharField(max_length=50)  # New field for ID number
     phone = models.CharField(max_length=15)  # New field for phone number
-    claim_form = models.FileField(upload_to='claim_forms/', null=True, blank=True) 
+    claim_form = models.FileField(upload_to='claim_forms/', null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -213,4 +214,62 @@ class Preauthorization(models.Model):
 
     def __str__(self):
         return f"Preauth for {self.patient_name} - {self.procedure} on {self.expected_surgery_date}"
+WARD_TYPE_CHOICES = [
+    ('ICU/HDU', 'ICU/HDU'),
+    ('Medical', 'Medical'),
+    ('Surgical', 'Surgical'),
+    ('Amenity', 'Amenity'),
+    ('Maternity', 'Maternity'),
+    ('Gynecology', 'Gynecology'),
+    ('Pediatrics', 'Pediatrics'),
+]
+
+class DischargeRecord(models.Model):
+    number = models.IntegerField(primary_key=True, null=False)
+    patient_name = models.CharField(max_length=100)
+    date_of_birth = models.DateField()
+    date_of_admission = models.DateField()
+    date_of_discharge = models.DateField()
+    inpatient_number = models.CharField(max_length=20)
+    ward_type = models.CharField(max_length=20, choices=WARD_TYPE_CHOICES)
+    claim_number = models.CharField(max_length=20, editable=False)
+    days_spent = models.PositiveIntegerField(editable=False)
+    amount = models.IntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+    # Set `number` to the highest value + 1 (auto-increment)
+        if self.number is None:
+            last_record = DischargeRecord.objects.aggregate(Max('number'))
+            self.number = (last_record['number__max'] or 0) + 1
+
+        # Calculate days spent
+        self.days_spent = (self.date_of_discharge - self.date_of_admission).days
+
+        # Save the object first to auto-generate the `number`
+        super().save(*args, **kwargs)
+
+        # After the object is saved, generate the claim number using the `number` field
+        year_month = self.date_of_discharge.strftime('%Y%m')
+        self.claim_number = f"{year_month}{int(self.number):03d}"  # Ensure `self.number` is an integer
+
+        # Save the updated claim number to the database
+        super().save(update_fields=['claim_number'])
+class DailySummary(models.Model):
+    patient_name = models.CharField(max_length=100)
+    id_no = models.CharField(max_length=20)
+    doa = models.DateField()
+    dod = models.DateField(null=True, blank=True)  # Allow null and blank
+    diagnosis = models.TextField()
+    procedure_plan = models.TextField()
+    mobile_number = models.CharField(max_length=15)
+
+class DailyTally(models.Model):
+    date = models.DateField(default=date.today)
+    admissions = models.IntegerField()
+    discharges = models.IntegerField()
+    surgeries = models.IntegerField()
+    deliveries = models.IntegerField()
+    radiology = models.IntegerField()
+    referrals_in = models.IntegerField()
+    referrals_out = models.IntegerField()
 

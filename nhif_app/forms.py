@@ -43,7 +43,7 @@ class MorgueBillingForm(forms.ModelForm):
 
 class UploadFileForm(forms.Form):
     file = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
-    
+
 class FilterForm(forms.Form):
     ClaimNumber = forms.CharField(
         required=False,
@@ -60,11 +60,11 @@ class FilterForm(forms.Form):
     PatientName = forms.CharField(
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Patient Name'})
-    ) 
+    )
     Stage = forms.CharField(
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Stage Name'})
-    )  
+    )
 class InpatientInvoiceForm(forms.ModelForm):
     class Meta:
         model = InpatientInvoice
@@ -95,7 +95,7 @@ class PatientExportForm(forms.Form):
 class PatientForm(forms.ModelForm):
     class Meta:
         model = Patient
-        fields = ['name', 'shifnumber','service','facility_name','idnumber','phone','claim_form']  
+        fields = ['name', 'shifnumber','service','facility_name','idnumber','phone','claim_form']
 class PreauthorizationForm(forms.ModelForm):
     class Meta:
         model = Preauthorization
@@ -129,4 +129,51 @@ class PreauthorizationForm(forms.ModelForm):
             "is_condition_related_to_accident": forms.CheckboxInput(attrs={"class": "form-check-input"}),
             "is_patient_co_insured": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
-        
+class DischargeRecordForm(forms.ModelForm):
+    class Meta:
+        model = DischargeRecord
+        fields = ['number','patient_name', 'date_of_birth', 'date_of_admission', 'date_of_discharge',
+                  'inpatient_number', 'ward_type', 'amount']
+        widgets = {
+            "number": forms.TextInput(attrs={"class": "form-control"}),
+            "patient_name": forms.TextInput(attrs={"class": "form-control"}),
+            "inpatient_number": forms.TextInput(attrs={"class": "form-control"}),
+            'date_of_birth': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'date_of_admission': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'date_of_discharge': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'ward_type': forms.Select(attrs={'class': 'form-control'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+class DailySummaryForm(forms.ModelForm):
+    class Meta:
+        model = DailySummary
+        fields = '__all__'
+        widgets = {
+            'patient_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'id_no': forms.TextInput(attrs={'class': 'form-control'}),
+            'doa': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'dod': forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'required': False}),
+            'diagnosis': forms.Textarea(attrs={'class': 'form-control','rows': 2}),
+            'procedure_plan': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+            'mobile_number': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+class DailyTallyForm(forms.ModelForm):
+    class Meta:
+        model = DailyTally
+        fields = '__all__'
+        widgets = {
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'admissions': forms.NumberInput(attrs={'class': 'form-control'}),
+            'discharges': forms.NumberInput(attrs={'class': 'form-control'}),
+            'surgeries': forms.NumberInput(attrs={'class': 'form-control'}),
+            'deliveries': forms.NumberInput(attrs={'class': 'form-control'}),
+            'radiology': forms.NumberInput(attrs={'class': 'form-control'}),
+            'referrals_in': forms.NumberInput(attrs={'class': 'form-control'}),
+            'referrals_out': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+class DateRangeForm(forms.Form):
+    start_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
+    end_date = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
+

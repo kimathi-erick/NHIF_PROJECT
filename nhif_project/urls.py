@@ -7,7 +7,11 @@ from nhif_app.views import custom_login_view
 from django.urls import reverse
 from django.contrib.auth import views as auth_views
 
+def ads_txt(request):
+    content = "google.com, pub-2289698734353242, DIRECT, f08c47fec0942fa0"
+    return HttpResponse(content, content_type="text/plain")
 urlpatterns = [
+    path('ads.txt', ads_txt),
     path('kimathidedan/', admin.site.urls),
     path('nhif/', include('nhif_app.urls')),
     path('login/', custom_login_view, name='login'),

@@ -25,15 +25,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%)5$+bcjx_yo)@%fxjjbgh*!%yrd9^4ohciu1ipg_#lvl^+pq5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 hostname = socket.gethostname()
 local_ip = socket.gethostbyname(hostname)
 
 ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    local_ip,
+    'ericqoh.pythonanywhere.com',
 ]
+
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = "SAMEORIGIN"
 
 
 

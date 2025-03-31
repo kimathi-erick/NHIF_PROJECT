@@ -1,0 +1,13 @@
+{% extends 'nhif_app/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Delete Daily Summary</h2>
+    <p>Are you sure you want to delete the daily summary for <strong>{{ summary.patient_name }}</strong>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="{% url 'daily_summary_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
