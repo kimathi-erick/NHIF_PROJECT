@@ -1,24 +1,32 @@
 @echo off
-setlocal
+setlocal EnableDelayedExpansion
 
 :: Prompt for the password
 set /p "userpass=Say my name: "
 
 :: Check if the password is correct
 if "%userpass%"=="daddy" (
-    echo Password correct! Running the Django server...
-    
-    REM Change directory to the project folder
-    cd C:\Users\hp\Desktop\nhif_project
+    echo Password correct! Detecting local IP...
 
-    REM Start the Django server using your local IP address on port 8000
-    start cmd /k "python manage.py runserver 192.168.0.116:8000"
+    :: Get the local IPv4 address
+    for /f "tokens=2 delims=:" %%A in ('ipconfig ^| findstr "IPv4 Address"') do (
+        set "ip=%%A"
+    )
+    for /f "tokens=* delims= " %%B in ("!ip!") do set "ip=%%B"
+
+    echo Using IP: !ip!
+
+    :: Change directory to the project folder
+    cd /d "C:\Users\hp\nhif_project"
+
+    :: Start the Django server using the detected IP address
+    start cmd /k "python manage.py runserver !ip!:8000"
 
     echo Waiting for the server to start...
     timeout /t 10 /nobreak
 
-    REM Open the browser with the correct path
-    start "" "C:\Program Files (x86)\Mozilla Firefox\firefox.exe" "http://192.168.0.116:8000"
+    :: Open the browser with the correct address
+    start "" "http://!ip!:8000"
 ) else (
     echo Incorrect password! Exiting...
     timeout /t 3 /nobreak

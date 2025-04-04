@@ -31,6 +31,9 @@ local_ip = socket.gethostbyname(hostname)
 
 ALLOWED_HOSTS = [
     'ericqoh.pythonanywhere.com',
+    '127.0.0.1',
+    local_ip
+    
 ]
 
 SECURE_BROWSER_XSS_FILTER = True
